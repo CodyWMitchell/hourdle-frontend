@@ -1,21 +1,22 @@
 import './Hourdle.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import classNames from 'classnames';
 
-const Key = ({letter}) => {
+const Key = ({letter, onClick}) => {
     return (
-        <button className="Key">
+        <button className="Key" onClick={onClick}>
             {letter}
         </button>
     )
 }
 
-const Keyboard = () => {
+const Keyboard = ({handleKeyPress, handleEnter, handleBackspace}) => {
     return (
         <div className="Keyboard">
-            {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter, index) => <Key letter={letter} key={index} />)}
-            <button className="button">⟸</button>
-            <button className="button">ENTER</button>
+            {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter, index) => <Key letter={letter} key={index} onClick={()=>{handleKeyPress(letter)}} />)}
+            <button className="button" onClick={()=>{handleBackspace()}}>⟸</button>
+            <button className="button" onClick={()=>{handleEnter()}}>ENTER</button>
         </div>
         )
 }
@@ -39,35 +40,78 @@ const Letter = ({letter, correct}) => {
 const Word = ({word, correct}) => {
     return (
         <div className="Word">
-            {word.split("").map((letter, index) => <Letter letter={letter} correct={correct[index]} key={index} />)}
+            {word.padEnd(5," ").split("").map((letter, index) => <Letter letter={letter} correct={correct[index]} key={index} />)}
         </div>
     )
 }
 
 const Hourdle = () => {
+    const [guessIndex, setGuessIndex] = useState(0)
     const [guesses, setGuesses] = useState([
-        "ABCDE",
-        "ABCDE",
-        "AAA  ",
-        "     ",
-        "     ",
-        "     "
-    ]);
-
-    const [correct, setCorrect] = useState([
-        "cmiii",
-        "cmiii",
+        "",
+        "",
         "",
         "",
         "",
         ""
     ]);
+    const [correct, setCorrect] = useState([
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
+    ]);
+    const [time, setTime] = useState("")
+
+    const handleKeyPress = (letter) => {
+        // Add letter to the current guess
+        if (guesses[guessIndex].length <= 4) {
+            setGuesses(guesses.map((guess, index) => index==guessIndex ? guess+letter : guess))
+        }
+
+        console.log("KEYPRESS", letter);
+    }
+
+    const handleBackspace = () => {
+        // remove the last letter from the current guess
+        if (guesses[guessIndex].length > 0) {
+            setGuesses(guesses.map((guess, index) => index==guessIndex ? guess.slice(0,-1) : guess))
+        }
+
+        console.log("BACKSPACE");
+    }
+
+    const handleEnter = () => {
+        // move to the next guess
+        if (guesses[guessIndex].length == 5 && guessIndex < 5) {
+            axios.post("/solve", {
+                guess: guesses[guessIndex].toLowerCase().split("")
+            }).then(response => {
+                console.log("Response:", response.data);
+            })
+            setGuessIndex(guessIndex+1)
+        }
+
+        console.log("ENTER");
+    }
+
+    // Update the time until the next available word
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"))
+        }, 1000);
+    }, []);
 
     return (
         <div className="Hourdle">
             <div className="Title">HOURDLE</div>
+            <div className="Countdown">
+                Next word in: <span className="Countdown-number">{time}</span>
+            </div>
             {guesses.map((guess, index) => <Word word={guess} correct={correct[index]} key={index} />)}
-            <Keyboard />
+            <Keyboard handleKeyPress={handleKeyPress} handleBackspace={handleBackspace} handleEnter={handleEnter} />
         </div>
     )
 }

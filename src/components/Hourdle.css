@@ -7,11 +7,11 @@
 }
 
 .Title {
-    @apply pb-4 font-bold;
+    @apply font-bold;
 }
 
 .Word {
-    @apply flex gap-2 pb-2;
+    @apply flex gap-2 p-2;
 }
 
 .Letter {
