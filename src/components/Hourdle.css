@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.Hourdle {
+    @apply flex flex-col items-center justify-center min-h-screen bg-slate-200 text-3xl;
+}
+
+.Title {
+    @apply pb-4 font-bold;
+}
+
+.Word {
+    @apply flex gap-2 pb-2;
+}
+
+.Letter {
+    @apply w-14 aspect-square rounded-lg flex items-center justify-center;
+}
+
+.correct {
+    @apply bg-green-500;
+}
+
+.misplaced {
+    @apply bg-yellow-500;
+}
+
+.incorrect {
+    @apply bg-slate-400;
+}
+
+.blank {
+    @apply border-2 border-slate-500;
+}
+
+.Keyboard {
+    @apply flex gap-2 pt-4;
+}
+
+.Key{
+    @apply p-2 bg-slate-400 rounded-lg aspect-square w-10 flex justify-center items-center;
+}
