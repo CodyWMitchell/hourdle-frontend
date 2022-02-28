@@ -35,9 +35,13 @@
 }
 
 .Keyboard {
-    @apply flex gap-2 pt-4;
+    @apply flex flex-wrap gap-2 pt-28 max-w-screen-sm;
 }
 
-.Key{
+.Key {
     @apply p-2 bg-slate-400 rounded-lg aspect-square w-10 flex justify-center items-center;
+}
+
+.button {
+   @apply p-2 bg-slate-400 rounded-lg flex justify-center items-center;
 }

@@ -14,6 +14,8 @@ const Keyboard = () => {
     return (
         <div className="Keyboard">
             {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter, index) => <Key letter={letter} key={index} />)}
+            <button className="button">BACK</button>
+            <button className="button">ENTER</button>
         </div>
         )
 }
@@ -48,12 +50,14 @@ const Hourdle = () => {
         "ABCDE",
         "AAA  ",
         "     ",
+        "     ",
         "     "
     ]);
 
     const [correct, setCorrect] = useState([
         "cmiii",
         "cmiii",
+        "",
         "",
         "",
         ""
