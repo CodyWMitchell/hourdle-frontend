@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .Hourdle {
-    @apply flex flex-col items-center justify-center min-h-screen bg-slate-200 text-3xl;
+    @apply flex flex-col items-center justify-center min-h-screen bg-slate-900 text-3xl text-white;
 }
 
 .Title {
@@ -11,27 +11,27 @@
 }
 
 .Word {
-    @apply flex gap-2 p-2;
+    @apply flex gap-2 pt-2;
 }
 
 .Letter {
-    @apply w-14 aspect-square rounded-lg flex items-center justify-center;
+    @apply w-14 aspect-square flex items-center justify-center font-extrabold;
 }
 
 .correct {
-    @apply bg-green-500;
+    @apply bg-green-600;
 }
 
 .misplaced {
-    @apply bg-yellow-500;
+    @apply bg-yellow-600;
 }
 
 .incorrect {
-    @apply bg-slate-400;
+    @apply bg-slate-700;
 }
 
 .blank {
-    @apply border-2 border-slate-500;
+    @apply border-2 border-slate-600;
 }
 
 .Keyboard {
@@ -39,9 +39,9 @@
 }
 
 .Key {
-    @apply p-2 bg-slate-400 rounded-lg aspect-square w-10 flex justify-center items-center;
+    @apply p-2 bg-slate-700 rounded-sm aspect-square w-10 flex justify-center items-center;
 }
 
 .button {
-   @apply p-2 bg-slate-400 rounded-lg flex justify-center items-center;
+   @apply p-2 bg-slate-700 rounded-sm flex justify-center items-center;
 }

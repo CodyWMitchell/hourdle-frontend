@@ -64,6 +64,8 @@ const Hourdle = () => {
         ""
     ]);
     const [time, setTime] = useState("")
+    const [won, setWon] = useState(false)
+    const [lost, setLost] = useState(false)
 
     const handleKeyPress = (letter) => {
         // Add letter to the current guess
@@ -93,14 +95,30 @@ const Hourdle = () => {
         const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
 
         // move to the next guess
-        if (guesses[guessIndex].length == 5 && guessIndex < 5) {
-            axios.post("/solve", {
-                time: timeString,
-                guess: guesses[guessIndex].toLowerCase().split("")
-            }).then(response => {
-                console.log("Response:", response.data);
-            })
-            setGuessIndex(guessIndex+1)
+        if (guesses[guessIndex].length == 5 && guessIndex <= 5) {
+            try {
+                axios.post("/api/v1/guess", {
+                    time: timeString,
+                    guess: guesses[guessIndex].toLowerCase().split("")
+                }).then(response => {
+                    console.log("Response:", response.data);
+
+                    const allowed = response.data.allowed;
+    
+                    if (allowed) {
+                        const result = response.data.result.join("");
+                        
+                        setCorrect(
+                            correct.map(
+                                (correctWord, index) => index==guessIndex ? result : correctWord
+                            )
+                        )
+                        setGuessIndex(guessIndex+1)
+                    }
+                })
+            } catch (error) {
+                console.log("Error:", error);
+            }
         }
 
         console.log("ENTER");
