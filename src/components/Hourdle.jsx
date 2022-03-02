@@ -84,9 +84,18 @@ const Hourdle = () => {
     }
 
     const handleEnter = () => {
+
+        // format time as "mm-dd-yyyy-hh" with leading zeros
+        const year = new Date().getFullYear()
+        const month = new Date().getMonth()+1
+        const day = new Date().getDate()
+        const hour = new Date().getHours()
+        const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+
         // move to the next guess
         if (guesses[guessIndex].length == 5 && guessIndex < 5) {
             axios.post("/solve", {
+                time: timeString,
                 guess: guesses[guessIndex].toLowerCase().split("")
             }).then(response => {
                 console.log("Response:", response.data);
