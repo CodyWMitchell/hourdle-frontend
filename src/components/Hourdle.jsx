@@ -68,6 +68,7 @@ const Hourdle = () => {
     const [time, setTime] = useState("")
     const [hasWon, setHasWon] = useState(false)
     const [hasLost, setHasLost] = useState(false)
+    const [gameTime, setGameTime] = useState(new Date())
 
     const handleKeyPress = (letter) => {
         if (hasWon || hasLost) {
@@ -78,8 +79,6 @@ const Hourdle = () => {
         if (guesses[guessIndex].length <= 4) {
             setGuesses(guesses.map((guess, index) => index==guessIndex ? guess+letter : guess))
         }
-
-        console.log("KEYPRESS", letter);
     }
 
     const handleBackspace = () => {
@@ -91,8 +90,6 @@ const Hourdle = () => {
         if (guesses[guessIndex].length > 0) {
             setGuesses(guesses.map((guess, index) => index==guessIndex ? guess.slice(0,-1) : guess))
         }
-
-        console.log("BACKSPACE");
     }
 
     const updateLetterStatus = (result, letters) => {
@@ -124,10 +121,10 @@ const Hourdle = () => {
         }
 
         // format time as "mm-dd-yyyy-hh" with leading zeros
-        const year = new Date().getFullYear()
-        const month = new Date().getMonth()+1
-        const day = new Date().getDate()
-        const hour = new Date().getHours()
+        const year = gameTime.getFullYear();
+        const month = gameTime.getMonth()+1;
+        const day = gameTime.getDate();
+        const hour = gameTime.getHours();
         const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
 
         // move to the next guess
@@ -169,17 +166,48 @@ const Hourdle = () => {
                 console.log("Error:", error);
             }
         }
-
-        console.log("ENTER");
     }
 
-    // Update the time until the next available word
     useEffect(() => {
+        // grab the guesses from localstorage when the component mounts
+        const storedGuesses = localStorage.getItem("hourdle");
+        if (storedGuesses) {
+            // check if guesses are expired
+            const storedTime = new Date(JSON.parse(storedGuesses).gameTime);
+            const oneHour = 1000 * 60 * 60;
+            const now = new Date();
+            const diff = now.getTime() - storedTime.getTime();
+            if (diff > oneHour) {
+                localStorage.clear();
+            } else {
+                setGuesses(JSON.parse(storedGuesses).guesses);
+                setCorrect(JSON.parse(storedGuesses).correct);
+                setGuessIndex(JSON.parse(storedGuesses).guessIndex);
+                setGameTime(new Date(JSON.parse(storedGuesses).gameTime));
+            }
+        }
+        // Create a timer that updates the time every second
         const interval = setInterval(() => {
-            setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"))
+            setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"));
         }, 1000);
+
         updateLetterColor();
     }, []);
+
+    // save the state to localstorage when any of the state changes
+    useEffect(() => {
+        saveState();
+    }, [guesses, correct, guessIndex, gameTime])
+
+    const saveState = () => {
+        const hourdleState = {
+            guesses: guesses,
+            correct: correct,
+            guessIndex: guessIndex,
+            gameTime: gameTime,
+        }
+        localStorage.setItem("hourdle", JSON.stringify(hourdleState));
+    }
 
     return (
         <>
