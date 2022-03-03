@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const Key = ({letter, onClick}) => {
     return (
-        <button className="Key" onClick={onClick}>
+        <button id={letter} className="Key" onClick={onClick}>
             {letter}
         </button>
     )
@@ -95,6 +95,29 @@ const Hourdle = () => {
         console.log("BACKSPACE");
     }
 
+    const updateLetterStatus = (result, letters) => {
+        let letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+
+        if (letterStatus == null) { letterStatus = {}}
+
+        [...letters].forEach((letter, i) => {
+            letterStatus[letter] = result[i];
+        });
+        window.localStorage.setItem("letter_status", JSON.stringify(letterStatus));
+        updateLetterColor();
+    }
+
+    const updateLetterColor = () => {
+        const letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+
+        for (const letter in letterStatus) {
+            const element = document.getElementById(letter)
+            if (element != null) {
+                element.classList.add(`status-${letterStatus[letter]}`);
+            }
+        }
+    }
+
     const handleEnter = () => {
         if (hasWon || hasLost) {
             return;
@@ -136,6 +159,7 @@ const Hourdle = () => {
                                 (correctWord, index) => index==guessIndex ? result : correctWord
                             )
                         )
+                        updateLetterStatus(result, guesses[guessIndex])
                         setGuessIndex(guessIndex+1)
                     } else {
                         toast("Sorry, that's not a valid guess.")
@@ -154,6 +178,7 @@ const Hourdle = () => {
         const interval = setInterval(() => {
             setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"))
         }, 1000);
+        updateLetterColor();
     }, []);
 
     return (
