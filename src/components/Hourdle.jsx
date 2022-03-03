@@ -5,6 +5,13 @@ import classNames from 'classnames';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+const TotalScore = () => {
+    return (
+        <div className="TotalScore">{`Total Score: ${localStorage.getItem("total_score")}`}</div>
+    )
+}
+
 const ShareIcon = ({onClick, ...props}) => {
     return (
         <button className="ShareIcon" onClick={onClick} {...props}>Share!</button>
@@ -77,11 +84,8 @@ const Hourdle = () => {
     const [gameTime, setGameTime] = useState(new Date())
 
     const incrementScore = () => {
-        let totalScore = window.localStorage.getItem("total_score");
-        if (totalScore == null) {
-            totalScore = 0
-        }
-        window.localStorage.setItem("total_score", parseInt(totalScore)+1);
+        let totalScore = localStorage.getItem("total_score");
+        localStorage.setItem("total_score", parseInt(totalScore)+1);
     }
 
     const handleKeyPress = (letter) => {
@@ -107,19 +111,19 @@ const Hourdle = () => {
     }
 
     const updateLetterStatus = (result, letters) => {
-        let letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+        let letterStatus = JSON.parse(localStorage.getItem("letter_status"));
 
         if (letterStatus == null) { letterStatus = {}}
 
         [...letters].forEach((letter, i) => {
             letterStatus[letter] = result[i];
         });
-        window.localStorage.setItem("letter_status", JSON.stringify(letterStatus));
+        localStorage.setItem("letter_status", JSON.stringify(letterStatus));
         updateLetterColor();
     }
 
     const updateLetterColor = () => {
-        const letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+        const letterStatus = JSON.parse(localStorage.getItem("letter_status"));
 
         for (const letter in letterStatus) {
             const element = document.getElementById(letter)
@@ -201,6 +205,12 @@ const Hourdle = () => {
                 setGameTime(new Date(JSON.parse(storedGuesses).gameTime));
             }
         }
+
+        const totalScore = localStorage.getItem("total_score");
+        if (!totalScore) {
+            localStorage.setItem("total_score", 0);
+        }
+
         // Create a timer that updates the time every second
         const interval = setInterval(() => {
             setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"));
@@ -254,6 +264,7 @@ const Hourdle = () => {
                 closeOnClick
             />
         <div className="Hourdle">
+            <TotalScore />
             <ShareIcon onClick={handleShare} className="ShareIcon" />
             <div className="Title">HOURDLE</div>
             <div className="Countdown">
