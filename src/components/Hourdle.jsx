@@ -5,6 +5,12 @@ import classNames from 'classnames';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const ShareIcon = ({onClick, ...props}) => {
+    return (
+        <button className="ShareIcon" onClick={onClick} {...props}>Share!</button>
+    )
+}
+
 const Key = ({letter, onClick}) => {
     return (
         <button id={letter} className="Key" onClick={onClick}>
@@ -209,6 +215,26 @@ const Hourdle = () => {
         localStorage.setItem("hourdle", JSON.stringify(hourdleState));
     }
 
+    const handleShare = () => {
+        const url = window.location.href;
+        // get correct letters except for empty lines
+
+        const correctLetters = correct.filter(word=>word!="").join("\n").replaceAll('i', '⬜').replaceAll('m', '🟨').replaceAll('c','🟩');
+
+        // format time as "mm-dd-yyyy-hh" with leading zeros
+        const year = gameTime.getFullYear();
+        const month = gameTime.getMonth()+1;
+        const day = gameTime.getDate();
+        const hour = gameTime.getHours();
+        const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+
+        const shareText = `${timeString}\n${correctLetters}\nHourdle - ${url}`;
+ 
+        navigator.clipboard.writeText(shareText).then(() => {
+            toast("Copied to clipboard!")
+        });
+    }
+
     return (
         <>
         <ToastContainer
@@ -219,6 +245,7 @@ const Hourdle = () => {
                 closeOnClick
             />
         <div className="Hourdle">
+            <ShareIcon onClick={handleShare} className="ShareIcon" />
             <div className="Title">HOURDLE</div>
             <div className="Countdown">
                 Next word in: <span className="Countdown-number">{time}</span>
