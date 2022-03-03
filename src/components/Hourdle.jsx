@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 const Key = ({letter, onClick}) => {
     return (
-        <button className="Key" onClick={onClick}>
+        <button id={letter} className="Key" onClick={onClick}>
             {letter}
         </button>
     )
@@ -85,6 +85,26 @@ const Hourdle = () => {
         console.log("BACKSPACE");
     }
 
+    const updateLetterStatus = (result, letters) => {
+        let letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+
+        if (letterStatus == null) { letterStatus = {}}
+
+        [...letters].forEach((letter, i) => {
+            letterStatus[letter] = result[i];
+        });
+        window.localStorage.setItem("letter_status", JSON.stringify(letterStatus));
+        updateLetterColor();
+    }
+
+    const updateLetterColor = () => {
+        const letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
+
+        for (const letter in letterStatus) {
+            document.getElementById(letter).classList.add(`status-${letterStatus[letter]}`);
+        }
+    }
+
     const handleEnter = () => {
 
         // format time as "mm-dd-yyyy-hh" with leading zeros
@@ -113,6 +133,7 @@ const Hourdle = () => {
                                 (correctWord, index) => index==guessIndex ? result : correctWord
                             )
                         )
+                        updateLetterStatus(result, guesses[guessIndex])
                         setGuessIndex(guessIndex+1)
                     }
                 })
