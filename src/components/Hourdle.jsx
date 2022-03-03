@@ -2,6 +2,8 @@ import './Hourdle.css'
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import classNames from 'classnames';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Key = ({letter, onClick}) => {
     return (
@@ -64,10 +66,14 @@ const Hourdle = () => {
         ""
     ]);
     const [time, setTime] = useState("")
-    const [won, setWon] = useState(false)
-    const [lost, setLost] = useState(false)
+    const [hasWon, setHasWon] = useState(false)
+    const [hasLost, setHasLost] = useState(false)
 
     const handleKeyPress = (letter) => {
+        if (hasWon || hasLost) {
+            return;
+        }
+
         // Add letter to the current guess
         if (guesses[guessIndex].length <= 4) {
             setGuesses(guesses.map((guess, index) => index==guessIndex ? guess+letter : guess))
@@ -77,6 +83,10 @@ const Hourdle = () => {
     }
 
     const handleBackspace = () => {
+        if (hasWon || hasLost) {
+            return;
+        }
+
         // remove the last letter from the current guess
         if (guesses[guessIndex].length > 0) {
             setGuesses(guesses.map((guess, index) => index==guessIndex ? guess.slice(0,-1) : guess))
@@ -109,6 +119,9 @@ const Hourdle = () => {
     }
 
     const handleEnter = () => {
+        if (hasWon || hasLost) {
+            return;
+        }
 
         // format time as "mm-dd-yyyy-hh" with leading zeros
         const year = new Date().getFullYear()
@@ -118,7 +131,7 @@ const Hourdle = () => {
         const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
 
         // move to the next guess
-        if (guesses[guessIndex].length == 5 && guessIndex <= 5) {
+        if (guesses[guessIndex] && guesses[guessIndex].length == 5 && guessIndex <= 5) {
             try {
                 axios.post("/api/v1/guess", {
                     time: timeString,
@@ -130,6 +143,16 @@ const Hourdle = () => {
     
                     if (allowed) {
                         const result = response.data.result.join("");
+
+                        if (result == "ccccc") {
+                            setHasWon(true);
+                            toast("You did it!")
+                        }
+
+                        if (guessIndex == 5 && result != "ccccc") {
+                            setHasLost(true);
+                            toast("Try again next time!")
+                        }
                         
                         setCorrect(
                             correct.map(
@@ -138,6 +161,8 @@ const Hourdle = () => {
                         )
                         updateLetterStatus(result, guesses[guessIndex])
                         setGuessIndex(guessIndex+1)
+                    } else {
+                        toast("Sorry, that's not a valid guess.")
                     }
                 })
             } catch (error) {
@@ -157,6 +182,14 @@ const Hourdle = () => {
     }, []);
 
     return (
+        <>
+        <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={true}
+                newestOnTop={true}
+                closeOnClick
+            />
         <div className="Hourdle">
             <div className="Title">HOURDLE</div>
             <div className="Countdown">
@@ -165,6 +198,7 @@ const Hourdle = () => {
             {guesses.map((guess, index) => <Word word={guess} correct={correct[index]} key={index} />)}
             <Keyboard handleKeyPress={handleKeyPress} handleBackspace={handleBackspace} handleEnter={handleEnter} />
         </div>
+        </>
     )
 }
 

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .Hourdle {
-    @apply flex flex-col items-center justify-center min-h-screen bg-slate-900 text-3xl text-white;
+    @apply flex flex-col items-center justify-center min-h-screen bg-slate-200 text-3xl font-mono dark:bg-slate-900 dark:text-white;
 }
 
 .Title {
@@ -27,19 +27,19 @@
 }
 
 .incorrect {
-    @apply bg-slate-700;
+    @apply bg-slate-400 dark:bg-slate-600;
 }
 
 .blank {
-    @apply border-2 border-slate-600;
+    @apply border-2 border-slate-400 dark:border-slate-600;
 }
 
 .Keyboard {
-    @apply flex flex-wrap justify-between gap-2 pt-28 max-w-screen-sm;
+    @apply flex flex-wrap justify-between gap-2 pt-12 max-w-screen-sm;
 }
 
 .Key {
-    @apply p-2 bg-slate-700 rounded-sm aspect-square w-10 flex justify-center items-center;
+    @apply p-2 bg-slate-300 rounded-sm aspect-square w-10 flex justify-center items-center dark:bg-slate-600;
 }
 
 .button {
