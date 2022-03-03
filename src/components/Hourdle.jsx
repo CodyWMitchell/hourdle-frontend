@@ -69,6 +69,14 @@ const Hourdle = () => {
     const [hasWon, setHasWon] = useState(false)
     const [hasLost, setHasLost] = useState(false)
 
+    const incrementScore = () => {
+        let totalScore = window.localStorage.getItem("total_score");
+        if (totalScore == null) {
+            totalScore = 0
+        }
+        window.localStorage.setItem("total_score", parseInt(totalScore)+1);
+    }
+
     const handleKeyPress = (letter) => {
         if (hasWon || hasLost) {
             return;
@@ -123,7 +131,8 @@ const Hourdle = () => {
 
                         if (result == "ccccc") {
                             setHasWon(true);
-                            toast("You did it!")
+                            incrementScore();
+                            toast("You did it!");
                         }
 
                         if (guessIndex == 5 && result != "ccccc") {
