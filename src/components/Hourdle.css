@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .Hourdle {
-    @apply flex flex-col items-center justify-center min-h-screen bg-slate-900 text-3xl text-white;
+    @apply flex flex-col items-center justify-center min-h-screen bg-slate-900 text-3xl text-white font-mono;
 }
 
 .Title {
@@ -35,7 +35,7 @@
 }
 
 .Keyboard {
-    @apply flex flex-wrap justify-between gap-2 pt-28 max-w-screen-sm;
+    @apply flex flex-wrap justify-between gap-2 pt-12 max-w-screen-sm;
 }
 
 .Key {
