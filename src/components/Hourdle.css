@@ -27,7 +27,7 @@
 }
 
 .incorrect {
-    @apply bg-slate-400 dark:bg-slate-600;
+    @apply bg-slate-400 dark:bg-slate-700;
 }
 
 .blank {
@@ -39,11 +39,11 @@
 }
 
 .Key {
-    @apply p-2 bg-slate-300 rounded-sm aspect-square w-10 flex justify-center items-center dark:bg-slate-600;
+    @apply p-2 bg-slate-300 rounded-sm aspect-square w-10 flex justify-center items-center dark:bg-slate-500;
 }
 
 .button {
-   @apply p-2 bg-slate-700 rounded-sm flex justify-center items-center;
+   @apply p-2 bg-slate-300 dark:bg-slate-500 rounded-sm flex justify-center items-center;
 }
 
 .status-c {
@@ -51,7 +51,7 @@
 }
 
 .status-i {
-    @apply bg-slate-400;
+    @apply bg-slate-400 dark:bg-slate-700;
 }
 
 .status-m {
