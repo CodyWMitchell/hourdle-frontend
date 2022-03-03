@@ -7,7 +7,7 @@
 }
 
 .ShareIcon {
-    @apply absolute right-10;
+    @apply absolute right-1 top-1 sm:right-10 sm:top-10;
 }
 
 .Title {
