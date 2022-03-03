@@ -101,7 +101,10 @@ const Hourdle = () => {
         const letterStatus = JSON.parse(window.localStorage.getItem("letter_status"));
 
         for (const letter in letterStatus) {
-            document.getElementById(letter).classList.add(`status-${letterStatus[letter]}`);
+            const element = document.getElementById(letter)
+            if (element != null) {
+                element.classList.add(`status-${letterStatus[letter]}`);
+            }
         }
     }
 
@@ -150,6 +153,7 @@ const Hourdle = () => {
         const interval = setInterval(() => {
             setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"))
         }, 1000);
+        updateLetterColor();
     }, []);
 
     return (
