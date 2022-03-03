@@ -246,9 +246,10 @@ const Hourdle = () => {
         const day = gameTime.getDate();
         const hour = gameTime.getHours();
         const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+        const boardScore = correct.reduce((prev,curr)=> {return curr != "" ? prev+1 : prev}, 0)
 
-        const shareText = `${timeString}\n${correctLetters}\nHourdle - ${url}`;
- 
+        const shareText = `Hourdle ${boardScore}/6\n${timeString}\n${correctLetters}\n${url}`;
+
         navigator.clipboard.writeText(shareText).then(() => {
             toast("Copied to clipboard!")
         });
