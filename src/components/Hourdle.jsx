@@ -133,6 +133,15 @@ const Hourdle = () => {
         }
     }
 
+    const getTimestring = () => {
+        const year = gameTime.getFullYear();
+        const month = gameTime.getMonth()+1;
+        const day = gameTime.getDate();
+        const hour = gameTime.getHours();
+        const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+        return timeString
+    }
+
     const handleEnter = () => {
         if (hasWon || hasLost) {
             return;
@@ -143,7 +152,7 @@ const Hourdle = () => {
         const month = gameTime.getMonth()+1;
         const day = gameTime.getDate();
         const hour = gameTime.getHours();
-        const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+        const timeString = localStorage.getItem("current_timestamp")
 
         // move to the next guess
         if (guesses[guessIndex] && guesses[guessIndex].length == 5 && guessIndex <= 5) {
@@ -211,6 +220,17 @@ const Hourdle = () => {
             localStorage.setItem("total_score", 0);
         }
 
+        const currentTimestamp = localStorage.getItem("current_timestamp");
+        const calculatedTimestamp = getTimestring()
+
+        if (!currentTimestamp || currentTimestamp != calculatedTimestamp) {
+            localStorage.setItem("current_timestamp", calculatedTimestamp);
+            localStorage.setItem("letter_status",JSON.stringify({}));
+            setGuesses(["","","","","",""]);
+            setCorrect(["","","","","",""]);
+            setGuessIndex(0);
+        }
+
         // Create a timer that updates the time every second
         const interval = setInterval(() => {
             setTime((60-new Date().getMinutes())-1 + ":" + (60-new Date().getSeconds()).toString().padStart(2,"0"));
@@ -245,7 +265,7 @@ const Hourdle = () => {
         const month = gameTime.getMonth()+1;
         const day = gameTime.getDate();
         const hour = gameTime.getHours();
-        const timeString = `${month<10 ? "0"+month : month}-${day<10 ? "0"+day : day}-${year}-${hour<10 ? "0"+hour : hour}`
+        const timeString = localStorage.getItem("current_timestamp");
         const boardScore = correct.reduce((prev,curr)=> {return curr != "" ? prev+1 : prev}, 0)
 
         const shareText = `Hourdle ${boardScore}/6\n${timeString}\n${correctLetters}\n${url}`;
