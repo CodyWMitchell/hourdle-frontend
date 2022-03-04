@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .Hourdle {
-    @apply flex flex-col items-center justify-center min-h-screen bg-slate-200 text-3xl font-mono dark:bg-slate-900 dark:text-white;
+    @apply flex flex-col items-center justify-center min-h-screen bg-slate-200 sm:text-3xl text-2xl font-mono dark:bg-slate-900 dark:text-white;
 }
 
 .TotalScore {
@@ -43,11 +43,15 @@
 }
 
 .Keyboard {
-    @apply flex flex-wrap justify-between gap-2 pt-12 max-w-screen-sm;
+    @apply flex flex-wrap justify-center gap-1 pt-12 max-w-screen-sm;
+}
+
+.ExtraButtons {
+    @apply flex justify-between w-full
 }
 
 .Key {
-    @apply p-2 bg-slate-300 rounded-sm aspect-square w-10 flex justify-center items-center dark:bg-slate-500;
+    @apply p-2 bg-slate-300 rounded-sm text-3xl aspect-square w-10 flex justify-center items-center dark:bg-slate-500;
 }
 
 .button {

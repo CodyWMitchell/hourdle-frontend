@@ -30,8 +30,11 @@ const Keyboard = ({handleKeyPress, handleEnter, handleBackspace}) => {
     return (
         <div className="Keyboard">
             {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter, index) => <Key letter={letter} key={index} onClick={()=>{handleKeyPress(letter)}} />)}
-            <button className="button" onClick={()=>{handleBackspace()}}>⟸</button>
-            <button className="button" onClick={()=>{handleEnter()}}>ENTER</button>
+            <div className="ExtraButtons">
+                <button className="button" onClick={()=>{handleBackspace()}}>⟸</button>
+                <button className="button" onClick={()=>{handleEnter()}}>ENTER</button>
+            </div>
+            
         </div>
         )
 }
