@@ -51,11 +51,11 @@
 }
 
 .Key {
-    @apply p-2 bg-slate-300 rounded-sm text-3xl aspect-square w-10 flex justify-center items-center dark:bg-slate-500;
+    @apply p-2 bg-slate-300 rounded-sm text-3xl aspect-square w-10 flex justify-center items-center dark:bg-slate-500 hover:contrast-200 active:scale-90;
 }
 
 .button {
-   @apply p-2 bg-slate-300 dark:bg-slate-500 rounded-sm flex justify-center items-center;
+   @apply p-2 bg-slate-300 dark:bg-slate-500 rounded-sm flex justify-center items-center hover:contrast-200 active:scale-90;
 }
 
 .status-c {
