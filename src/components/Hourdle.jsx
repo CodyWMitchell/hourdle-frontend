@@ -197,7 +197,8 @@ const Hourdle = () => {
             const now = new Date();
             const diff = now.getTime() - storedTime.getTime();
             if (diff > oneHour) {
-                localStorage.clear();
+                localStorage.removeItem("hourdle");
+                localStorage.removeItem("letter_status");
             } else {
                 setGuesses(JSON.parse(storedGuesses).guesses);
                 setCorrect(JSON.parse(storedGuesses).correct);
