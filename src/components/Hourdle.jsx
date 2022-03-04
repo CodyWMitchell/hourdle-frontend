@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const TotalScore = () => {
     return (
-        <div className="TotalScore">{`Total Score: ${localStorage.getItem("total_score")}`}</div>
+        <div className="TotalScore">{`Total Score: ${(localStorage.getItem("total_score")!=null ? localStorage.getItem("total_score"): '')}`}</div>
     )
 }
 
@@ -234,6 +234,24 @@ const Hourdle = () => {
         }
         localStorage.setItem("hourdle", JSON.stringify(hourdleState));
     }
+
+    const handleKeyboardInput = (e) => {
+        if (e.key == "Backspace") {
+            handleBackspace();
+        } else if (e.key == "Enter") {
+            handleEnter();
+        } else if ('abcdefghijklmnopqrstuvwxyz'.includes(e.key)) {
+            handleKeyPress(e.key.toUpperCase());
+        }   
+    }
+
+    useEffect(() => {
+        window.addEventListener("keydown", handleKeyboardInput);
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyboardInput);
+        }
+    }, [guessIndex, guesses])
 
     const handleShare = () => {
         const url = window.location.href;
