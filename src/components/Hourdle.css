@@ -43,7 +43,7 @@
 }
 
 .Keyboard {
-    @apply flex flex-wrap justify-center gap-1 pt-12 max-w-screen-sm;
+    @apply flex flex-wrap justify-center gap-1 pt-6 max-w-screen-sm;
 }
 
 .ExtraButtons {
